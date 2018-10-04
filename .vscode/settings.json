@@ -2,6 +2,12 @@
     "files.associations": {
         "iosfwd": "cpp",
         "iostream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "*.tcc": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "system_error": "cpp",
+        "chrono": "cpp",
+        "limits": "cpp"
     }
 }
