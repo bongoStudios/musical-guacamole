@@ -18,7 +18,7 @@ int starty = 0;
 char *choices[] = { 
 			"Rock",
 			"Paper",
-			"Scisors",
+			"Scissors",
 			"Exit",
 		  };
 int n_choices = sizeof(choices) / sizeof(char *);
@@ -28,9 +28,10 @@ void* getchBool (void *args);
 
 int main () {
 WINDOW *menu_win;
-	int highlight = 1;
-	int choice = 0;
+	int highlight;
+	int choice;
 	int c;
+	int botChoice;
 
 	initscr();
 	clear();
@@ -42,36 +43,67 @@ WINDOW *menu_win;
 		
 	menu_win = newwin(HEIGHT, WIDTH, starty, startx);
 	keypad(menu_win, TRUE);
-	mvprintw(0, 0, "Use arrow keys to go up and down, Press enter to select a choice");
-	refresh();
-	print_menu(menu_win, highlight);
-	while(1)
-	{	c = wgetch(menu_win);
-		switch(c)
-		{	case KEY_UP:
-				if(highlight == 1)
-					highlight = n_choices;
-				else
-					--highlight;
-				break;
-			case KEY_DOWN:
-				if(highlight == n_choices)
-					highlight = 1;
-				else 
-					++highlight;
-				break;
-			case 10:
-				choice = highlight;
-				break;
-		}
+	while(1) {
+		choice = 0;
+		highlight = 1;
+		clear();
+		mvprintw(0, 0, "Use arrow keys to go up and down, Press enter to select a choice.");
+		refresh();
 		print_menu(menu_win, highlight);
-		if(choice != 0)
-			break;
-	}	
-    clear();
-	printw("%d", choice);
-	refresh();
-    getch();
+		while(1)
+		{	
+			c = wgetch(menu_win);
+			switch(c)
+			{	case KEY_UP:
+					if(highlight == 1)
+						highlight = n_choices;
+					else
+						--highlight;
+					break;
+				case KEY_DOWN:
+					if(highlight == n_choices)
+						highlight = 1;
+					else 
+						++highlight;
+					break;
+				case 10:
+					choice = highlight;
+					break;
+			}
+			print_menu(menu_win, highlight);
+			if(choice != 0)
+				break;
+		}	
+		clear();
+		if(choice == 4) {
+			endwin();
+			return 0;
+		}
+		botChoice = randomNo(3, 1);
+		if(botChoice == choice) {	
+			printw("Hmm, a draw.");	
+		} else if(botChoice == 3) {
+			printw("Your opponent chose scissors.");
+			if(choice == 2)
+				printw("You lost the game, and also x doubloons.");
+			else
+				printw("You won. Was that luck, or skill?\nYou also get a whopping x doubloons");	
+		} else if(botChoice == 2) {
+			printw("Your opponent chose paper.");
+			if(choice == 1)
+				printw("You lost the game, and also x doubloons.");
+			else
+				printw("You won. Was that luck, or skill?\nYou also get a whopping x doubloons");	
+		} else {
+			printw("Your opponent chose rock.");
+			if(choice == 3)
+				printw("You lost the game, and also x doubloons.");
+			else
+				printw("You won. Was that luck, or skill?\nYou also get a whopping x doubloons");	
+		}
+		refresh();
+    	getch();
+	}
 	endwin();
 	return 0;
 }
