@@ -16,26 +16,32 @@ using namespace std;
 int startx = 0;
 int starty = 0;
 
-string userRock[6] = {"    _______", "---'   ____)", "      (_____)", "      (_____)", "      (____)", "---.__(___)"},
-userPaper[6] = {"    _______", "---'   ____)____", "          ______)", "          _______)", "         _______)", "---.__________)"},
-userScissors[6] = {"    _______", "---'   ____)_____", "            _____)", "          ________)", "      (____)", "---.__(___)"},
+string userRock[8] = {"    _______", "---'   ____)", "      (_____)", "      (_____)", "      (____)", "---.__(___)", "", ""},
+userPaper[8] = {"    _______", "---'   ____)____", "          ______)", "          _______)", "         _______)", "---.__________)", "", ""},
+userScissors[8] = {"    _______", "---'   ____)_____", "            _____)", "          ________)", "      (____)", "---.__(___)", "", ""},
+userLizard[8] = {"    ___________", "---'  ________))", "     (_____", "---._______)", "", "", "", ""},
+userSpock[8] = {"     ______", "    /  ____)", "---'  (_________", "           _____)", "          _______)", "         {______", "          ______)", "---.__________)"},
 
-machineRock[6] = {"  _______", " (____   '---", "(_____)", "(_____)", " (____)", "  (___)__.---"},
-machinePaper[6] = {"       _______", "  ____(____   '---", " (______", "(_______", " (_______", "   (__________.---"},
-machineScissors[6] = {"       _______", "  ____(____   '---", " (_____", "(________", "      (____)", "       (___)__.---"};
+machineRock[8] = {"  _______", " (____   '---", "(_____)", "(_____)", " (____)", "  (___)__.---", "", ""},
+machinePaper[8] = {"       _______", "  ____(____   '---", " (______", "(_______", " (_______", "   (__________.---", "", ""},
+machineScissors[8] = {"       _______", "  ____(____   '---", " (_____", "(________", "      (____)", "       (___)__.---", "", ""},
+machineLizard[8] = {" ___________", "((_______   '---", "     ____)", "    (_______.---", "", "", "", ""},
+machineSpock[8] = {"       ______", "      (____  \\", "  _________)  '---", " (_____", "(_______", "  ______}", " (______", "   (__________.---"};
 
-string *userChoices[3] = {userRock, userPaper, userScissors},
-*machineChoices[3] = {machineRock, machinePaper, machineScissors};
+string *userChoices[5] = {userRock, userPaper, userScissors, userLizard, userSpock},
+*machineChoices[5] = {machineRock, machinePaper, machineScissors, machineLizard, machineSpock};
 
-char whatChoice[3][12] = {"Rock!", "Paper!", "Scissors!"},
-*choices[5] = { 
+char whatChoice[5][12] = {"Rock!", "Paper!", "Scissors!", "Lizard!", "Spock!"},
+*choices[6] = { 
 			"Rock",
 			"Paper",
 			"Scissors",
+            "Lizard",
+            "Spock",
 			"Exit",
 		  };
 		  
-int n_choices = 4;
+int n_choices = 6;
 
 void print_menu(WINDOW *menu_win, int highlight);
 
@@ -45,7 +51,6 @@ WINDOW *menu_win;
 	int choice;
 	int c;
 	int botChoice;
-	bool first = true;
 
 	initscr();
 	clear();
@@ -93,23 +98,11 @@ WINDOW *menu_win;
 			if(choice != 0)
 				break;
 		}
-		if(first) {
-			if(choice == 4) {
-				endwin();
-				return 0;
-			}
-			first = false;
-			n_choices = 5;
-			choices[4] = "Exit";
-			choices[3] = "Enhanced version pls";
-		}
-		if(choice > 3) {
+		if(choice == 6) {
 			endwin();
-			if(choice == 4)
-				1+1;
 			return 0;
 		}
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < 5; i++) {
 			clear();
 			for(int j = 0; j < 6; j++) {
 				mvprintw(0, 0, whatChoice[i]);
@@ -131,8 +124,8 @@ WINDOW *menu_win;
 		}
 		usleep(100000);
 		clear();
-		botChoice = randomNo(3, 1);
-		for(int i = 0; i < 6; i++) {
+		botChoice = randomNo(5, 1);
+		for(int i = 0; i < 8; i++) {
 			mvprintw(0, 0, whatChoice[choice-1]);
 			mvprintw(0, 25, whatChoice[botChoice-1]);
 			mvprintw(i+1, 0, userChoices[choice-1][i].c_str());
@@ -143,25 +136,37 @@ WINDOW *menu_win;
 			mvprintw(10, 0, "Hmm, a draw.");	
 		} else if(botChoice == 3) {
 			mvprintw(10, 0, "Your opponent chose scissors. ");
-			if(choice == 2)
+			if(choice == 2 or choice == 4)
 				printw("You lost the game, and also x doubloons.");
 			else
 				printw("You won. Was that luck, or skill?\nYou also get the whopping amount of x doubloons");	
 		} else if(botChoice == 2) {
 			mvprintw(10, 0, "Your opponent chose paper. ");
-			if(choice == 1)
+			if(choice == 1 or choice == 5)
 				printw("You lost the game, and also x doubloons.");
 			else
 				printw("You won. Was that luck, or skill?\nYou also get the whopping amount of x doubloons");	
-		} else {
+		} else if(botChoice == 1) {
 			mvprintw(10, 0, "Your opponent chose rock. ");
-			if(choice == 3)
+			if(choice == 3 or choice == 4)
 				printw("You lost the game, and also x doubloons.");
 			else
 				printw("You won. Was that luck, or skill?\nYou also get the whopping amount of x doubloons");	
-		}
+		} else if(botChoice == 4) {
+            mvprintw(10, 0, "Your opponent chose lizard. ");
+			if(choice == 2 or choice == 5)
+				printw("You lost the game, and also x doubloons.");
+			else
+				printw("You won. Was that luck, or skill?\nYou also get the whopping amount of x doubloons");
+        } else {
+            mvprintw(10, 0, "Your opponent chose spock. ");
+			if(choice == 1 or choice == 3)
+				printw("You lost the game, and also x doubloons.");
+			else
+				printw("You won. Was that luck, or skill?\nYou also get the whopping amount of x doubloons");
+        }
 		refresh();
-		sleep(2);
+        sleep(2);
     	getch();
 	}
 	endwin();
