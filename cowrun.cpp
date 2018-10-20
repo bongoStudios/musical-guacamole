@@ -51,6 +51,19 @@ struct Jockey {
 	Cow cow;
 };
 
+struct Event {
+	char text[12][384];
+	int textSize;
+	string usedAttribute;
+	int *attribute,
+	amountOfDices,
+	kindOfDice,
+	diffClass,
+	displacement;
+
+};
+
+Event events[100];
 
 char firstNames[][24] = { "Adam", "Alex", "Aaron", "Ben", "Carl", "Dan", "David", "Edward", "Fred", "Frank", "George", "Hal", "Hank", "Ike", "John", "Jack", "Joe", "Larry", "Monte", "Matthew", "Mark", "Nathan", "Otto", "Paul", "Peter", "Roger", "Rosaline", "Steve", "Thomas", "Tim", "Tyler", "Victor", "Walter", "Julian", "Rory", "Maximilian", "Angela", "Dmitri", "Vladimir", "Moriah", "Jebediah", "Viktor", "Jeff", "Timothy", "Jari", "Robin", "Alessandra", "Moe", "Duncan", "Layla", "Lia", "Daniel", "Beatrice", "Bjorn", "Sullivan", "Dorothy", "Joel", "Kenny", "Robert"},
 lastNames[][24] = { "Anderson", "Ashwoon", "Aikin", "Bateman", "Bongard", "Bowers", "Boyd", "Cannon", "Cast", "Deitz", "Dewalt", "Ebner", "Frick", "Hancock", "Haworth", "Hesch", "Hoffman", "Kassing", "Knutson", "Lawless", "Lawicki", "Mccord", "McCormack", "Miller", "Myers", "Nugent", "Ortiz", "Orwig", "Ory", "Paiser", "Pak", "Pettigrew", "Quinn", "Quizoz", "Ramachandran", "Resnick", "Sagar", "Schickowski", "Schiebel", "Sellon", "Severson", "Shaffer", "Solberg", "Soloman", "Sonderling", "Soukup", "Soulis", "Stahl", "Sweeney", "Tandy", "Trebil", "Trusela", "Trussel", "Turco", "Uddin", "Uflan", "Ulrich", "Upson", "Vader", "Vail", "Valente", "Van Zandt", "Vanderpoel", "Ventotla", "Vogal", "Wagle", "Wagner", "Wakefield", "Weinstein", "Weiss", "Woo", "Yang", "Yates", "Yocum", "Zeaser", "Zeller", "Ziegler", "Bauer", "Baxster", "Casal", "Cataldi", "Caswell", "Celedon", "Chambers", "Chapman", "Christensen", "Darnell", "Davidson", "Davis", "DeLorenzo", "Dinkins", "Doran", "Dugelman", "Dugan", "Duffman", "Eastman", "Ferro", "Ferry", "Fletcher", "Fietzer", "Hylan", "Hydinger", "Illingsworth", "Ingram", "Irwin", "Jagtap", "Jenson", "Johnson", "Johnsen", "Jones", "Jurgenson", "Kalleg", "Kaskel", "Keller", "Leisinger", "LePage", "Lewis", "Linde", "Lulloff", "Maki", "Martin", "McGinnis", "Mills", "Moody", "Moore", "Napier", "Nelson", "Norquist", "Nuttle", "Olson", "Ostrander", "Reamer", "Reardon", "Reyes", "Rice", "Ripka", "Roberts", "Rogers", "Root", "Sandstrom", "Sawyer", "Schlicht", "Schmitt", "Schwager", "Schutz", "Schuster", "Tapia", "Thompson", "Tiernan", "Tisler" },
@@ -90,7 +103,7 @@ int main () {
         Jockey jockeys[5];
 		int i = 0;
 		clear();
-		mvprintw(0, 0, "Calculating stats for the new cow race");
+		mvprintw(0, 0, "Calculating stats for the new cow race"\n);
 		refresh();
 		makeTheJockey(i, jockeys);
 		printw(".");
@@ -137,9 +150,11 @@ int main () {
 			if(c == 121 or c == 89)
 				break;
 			clear();
-			mvprintw(0, 0, "Oh ok... then, Who you choosin'?");
+			mvprintw(0, 0, "Oh, ok then, Who you choosin'?");
 			printMenu(menu_win, choice);
 		}
+		Jockey *theChosenOne = &(jockeys[choice-1]);
+
 		endwin();
 		return 0;
     }

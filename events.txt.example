@@ -1,0 +1,19 @@
+First String //Event text
+Second String
+Third String
+Fourth String
+Fifth String
+Sixth String
+Seventh String
+Eighth String
+Ninth String
+                Decimal String //it needs to be ten lines yes or yes, they can be empty
+You did it String //when the roll is succesful, this appears.
+You fail String //when the roll is unsuccesful, this appears.
+3 //Means it will only use from the First string to the Third and not the others
+intelligence //it will use the intelligence stat of the cow
+2 //the amount of dices
+8 //this means it will throw 2d8
+15 //If you roll less than this, you fail, otherwise, you succeed on the event
+-2 // if you fail the event, the jockey gets moved this amount of spaces
+1 // if you succeed the event, the jockey gets moved this amount of spaces
