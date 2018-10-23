@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
+#include <fstream>
 #include <stdlib.h>
 #include <string.h>
 #include "random.hpp"
@@ -46,21 +47,23 @@ struct Jockey {
 		riding = randomNo(5, -5);
 		luck = randomNo(5, -5);
 	}
-	int riding, luck;
+	int riding, luck, pos = 0;
 	char firstName[24], lastName[24];
 	Cow cow;
 };
 
 struct Event {
-	char text[12][384];
+	char text[10][384];
+	char winText[384];
+	char loseText[384];
 	int textSize;
 	string usedAttribute;
 	int *attribute,
 	amountOfDices,
 	kindOfDice,
 	diffClass,
-	displacement;
-
+	winPlacement,
+	losePlacement;
 };
 
 Event events[100];
@@ -73,12 +76,34 @@ char *choices[10] = {
 			"Start",
 			"Exit",
 		  };
-		  
-int n_choices = 2;
+
+int n_choices = 2, amountOfEvents = 0, posChances[] = {0, 0, 1, 1, 2, 2, 3};
 
 void print_menu(WINDOW *menu_win, int highlight);
 void makeTheJockey(int &i, Jockey jockeys[5]);
 void printMenu(WINDOW *menu_win, int &choice);
+void printRoad() {
+	move(0,0);
+	for(int i = 0; i < 5; i++) {
+		printw("----------------------\n");
+		printw("%d\n", i+1);
+		printw("%d\n", i+1);
+	}
+
+	printw("----------------------\n");
+	for(int i = 0; i < 16; i++)
+		mvprintw(i, 22, "|");
+}
+void printPos(Jockey jockeys[5]) {
+	for(int i = 0; i<5; i++) {
+		Jockey *current = &jockeys[i];
+		for(int j = 1; j<16; j+=3) {
+			mvprintw(j, 2+(*current).pos, "_");
+		}
+	}
+}
+void loadEvents();
+int strToInt(string temp);
 void cleanChoices() {
 	for(int i = 0; i < 10; i++)
 		choices[i] = "";
@@ -87,6 +112,7 @@ void cleanChoices() {
 int main () {
     WINDOW *menu_win;
 	int c, choice;
+	loadEvents();
 
     initscr();
 	clear();
@@ -100,10 +126,11 @@ int main () {
 	keypad(menu_win, TRUE);
 
     while(1) {
-        Jockey jockeys[5];
+		int zedice;
+	    Jockey jockeys[5];
 		int i = 0;
 		clear();
-		mvprintw(0, 0, "Calculating stats for the new cow race"\n);
+		mvprintw(0, 0, "Calculating stats for the new cow race");
 		refresh();
 		makeTheJockey(i, jockeys);
 		printw(".");
@@ -154,10 +181,49 @@ int main () {
 			printMenu(menu_win, choice);
 		}
 		Jockey *theChosenOne = &(jockeys[choice-1]);
+		int theNumberOne = choice;
+		clear();
+		printRoad();
+		printPos(jockeys);
+		refresh();
+		mvprintw(17, 0, "The one you choosed is in line %d\nBegin? (press something)", theNumberOne);
+		getch();
+		bool kill = false;
+		while(true) {
+			clear();
+			printRoad();
+			printPos(jockeys);
+			refresh();
+			move(17, 0);
+			for(int i = 0; i<5; i++) {
+				Jockey *current = &jockeys[i];
+				if((*current).pos > 19) {
+					kill = true;
+					printw("In line %d, %s and %s won!\n", theNumberOne, (*current).lastName, (*current).cow.name);
+				}
+			}
+			if(kill)
+				break;
+			for(int i = 0; i<5; i++) {
+				Jockey *current = &jockeys[i];
+				if(randomNo(100, 1) < 25) {
+					Event event = events[randomNo(amountOfEvents-1, 0)];
+					if(theNumberOne == (i+1)) {
+						for(int j = 0; j<event.textSize; j++) {
+							printw("%s\n", event.text[j]);
+							getch();
+						}
+					} else {
 
-		endwin();
-		return 0;
-    }
+					}
+				} else {
+					(*current).pos+=posChances[randomNo(6, 0)];
+				}
+			}
+			sleep(2);
+		}
+	}
+	endwin();
     return 0;
 }
 
@@ -215,4 +281,58 @@ void print_menu(WINDOW *menu_win, int highlight)
 		++y;
 	}
 	wrefresh(menu_win);
+}
+
+int strToInt(string temp) {
+	return stoi(temp, nullptr, 10);
+}
+
+void loadEvents() {
+	string line;
+	int j = 0;
+	fstream file;
+	file.open("events.txt", ios::in);
+	if(!file.is_open())
+		return;
+	while(!file.eof()) {
+		Event *event = &events[j];
+		for(int i = 0; i<19; i++) {
+			getline(file, line);
+			switch(i) {
+				case 10:
+					strcpy((*event).winText, line.c_str());
+					break;
+				case 11:
+					strcpy((*event).loseText, line.c_str());
+					break;
+				case 12:
+					(*event).textSize = strToInt(line);
+					break;
+				case 13:
+					(*event).usedAttribute = line;
+					break;
+				case 14:
+					(*event).amountOfDices = strToInt(line);
+					break;
+				case 15:
+					(*event).kindOfDice = strToInt(line);
+					break;
+				case 16:
+					(*event).diffClass = strToInt(line);
+					break;
+				case 17: 
+					(*event).losePlacement = strToInt(line);
+					break;
+				case 18:
+					(*event).winPlacement = strToInt(line);
+					break;
+				default:
+					strcpy((*event).text[i], line.c_str());
+					break;
+			}
+		}
+		j++;
+	}
+	amountOfEvents = j;
+	file.close();
 }

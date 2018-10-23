@@ -7,7 +7,7 @@ Sixth String
 Seventh String
 Eighth String
 Ninth String
-                Decimal String //it needs to be ten lines yes or yes, they can be empty
+                Tenth String //it needs to be ten lines yes or yes, they can be empty
 You did it String //when the roll is succesful, this appears.
 You fail String //when the roll is unsuccesful, this appears.
 3 //Means it will only use from the First string to the Third and not the others
