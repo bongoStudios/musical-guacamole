@@ -18,11 +18,11 @@ int startx = 0, starty = 0, firstNamesLength = 59,
 lastNamesLength = 150, cowNamesLength = 15;
 
 
-int *throwDice(int cantidad, int dado)  {
-	int *dados = new int[cantidad];
-	for(int i = 0; i<cantidad; i++)
-		dados[i] = randomNo(dado, 1);
-	return dados;
+int throwDice(int amount, int dice)  {
+	int dices = 0;
+	for(int i = 0; i<amount; i++)
+		dices += randomNo(dice, 1);
+	return dices;
 }
 
 struct Cow {
@@ -95,19 +95,18 @@ void printRoad() {
 		mvprintw(i, 22, "|");
 }
 void printPos(Jockey jockeys[5]) {
-	for(int i = 0; i<5; i++) {
+	for(int i = 0, j = 1; i<5; i++, j+=3) {
 		Jockey *current = &jockeys[i];
-		for(int j = 1; j<16; j+=3) {
-			mvprintw(j, 2+(*current).pos, "_");
-		}
+		mvprintw(j, 2+(*current).pos, "_");
 	}
 }
 void loadEvents();
-int strToInt(string temp);
 void cleanChoices() {
 	for(int i = 0; i < 10; i++)
 		choices[i] = "";
 }
+int strToInt(string temp);
+int attributeToInt(string attr, Jockey jockey);
 
 int main () {
     WINDOW *menu_win;
@@ -186,7 +185,7 @@ int main () {
 		printRoad();
 		printPos(jockeys);
 		refresh();
-		mvprintw(17, 0, "The one you choosed is in line %d\nBegin? (press something)", theNumberOne);
+		mvprintw(17, 0, "The one you chose is in line %d\nBegin? (press something)", theNumberOne);
 		getch();
 		bool kill = false;
 		while(true) {
@@ -200,6 +199,8 @@ int main () {
 				if((*current).pos > 19) {
 					kill = true;
 					printw("In line %d, %s and %s won!\n", theNumberOne, (*current).lastName, (*current).cow.name);
+					refresh();
+					getch();
 				}
 			}
 			if(kill)
@@ -208,20 +209,49 @@ int main () {
 				Jockey *current = &jockeys[i];
 				if(randomNo(100, 1) < 25) {
 					Event event = events[randomNo(amountOfEvents-1, 0)];
+					int attr = attributeToInt(event.usedAttribute, *current);
 					if(theNumberOne == (i+1)) {
+						sleep(1);
+						clear();
 						for(int j = 0; j<event.textSize; j++) {
 							printw("%s\n", event.text[j]);
+							refresh();
 							getch();
 						}
+						printw("Rolling... ");
+						refresh();
+						sleep(1);
+						int diceRes = throwDice(event.amountOfDices, event.kindOfDice) + attr;
+						printw("%dd%d+%s = %d\n", event.amountOfDices, event.kindOfDice, event.usedAttribute.c_str(), diceRes);
+						refresh();
+						getch();
+						if(diceRes < event.diffClass) {
+							printw("%s\n", event.loseText);
+							getch();
+							refresh();
+							(*current).pos += event.losePlacement;
+						} else {
+							printw("%s\n", event.winText);
+							refresh();
+							getch();
+							(*current).pos += event.winPlacement;
+						}
 					} else {
-
+						int diceRes = throwDice(event.amountOfDices, event.kindOfDice) + attr;
+						if(diceRes < event.diffClass)
+							(*current).pos += event.losePlacement;
+						else
+							(*current).pos += event.winPlacement;
 					}
+					if((*current).pos < 1)
+						(*current).pos = 0;
 				} else {
 					(*current).pos+=posChances[randomNo(6, 0)];
 				}
 			}
 			sleep(2);
 		}
+		
 	}
 	endwin();
     return 0;
@@ -285,6 +315,24 @@ void print_menu(WINDOW *menu_win, int highlight)
 
 int strToInt(string temp) {
 	return stoi(temp, nullptr, 10);
+}
+
+int attributeToInt(string attr, Jockey jockey) {
+	switch(attr[0]) {
+		case 'i':
+			return jockey.cow.intelligence;
+		case 'd':
+			return jockey.cow.dexterity;
+		case 's':
+			return jockey.cow.strength;
+		case 'w':
+			return jockey.cow.willpower;
+		case 'r':
+			return jockey.riding;
+		case 'l':
+			return jockey.luck;
+	}
+	return 1000;
 }
 
 void loadEvents() {

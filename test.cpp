@@ -13,6 +13,13 @@
 
 using namespace std;
 
+int throwDice(int amount, int dice)  {
+	int dices = 0;
+	for(int i = 0; i<amount; i++)
+		dices += randomNo(dice, 1);
+	return dices;
+}
+
 int main() {
-    cout << randomNo(2, -2);
+    cout << throwDice(1, 25) << endl;
 }
