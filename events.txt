@@ -8,7 +8,7 @@ Make a riding check for the jockey.
 
 
 
-You maganed to dodge out of the way in time, good jockey, job.
+You managed to dodge out of the way in time, good jockey, job.
 You plastered your face into the tree, and lost your momentum. Oh well, you tried your best.
 2
 riding
@@ -131,3 +131,98 @@ dexterity
 15
 -2
 1
+WHAT IS LOVE? Miss cow don't hurt me, don't hurt me, no more.
+...
+What is right? What is wrong? Give me a sign...
+
+
+
+
+
+
+
+Jim Carrey would be proud.
+You've fallen into the atrocious and unforgiving depths of romance. As Jon Bon Jovi would say, when passion's a prison you can't break free.
+3
+intelligence
+1
+20
+10
+-3
+2
+After a sudden moment of meditation, you reach the most profound of questions, a question as vast as the sky and as deep as the sea.
+Can I really do this?
+Is it beyond human capabilities?
+Can it even be achieved?
+Matters not, you must try, this cannot wait any longer.
+You look at your foot, and say:
+"Wiggle your big toe."
+You try, but despite all your effort, it is futile.
+"Wiggle your big toe." You repeat, calmly.
+(Make a luck roll.)
+Good. You did it, now you're ready. Ready to kill Bill.
+You can't. But hey, at least you tried, it's the thought that counts.
+10
+luck
+2
+8
+11
+0
+0
+Oh god. Not again.
+Your cow is stuck in an endless loop.
+
+if cow.stuck() = true {
+    RollWillpower();
+}
+
+
+
+
+Sick coding skills. Wow. Oh wait that was the cow, nevermind.
+Oh dude what did you do? Never touch that poor cyber-cow again.
+6
+willpower
+1
+20
+12
+-4
+1
+You feel something ominous.
+It's your cow. She looks very innocent on the outside
+but she's actually trying to confuse the universe into believing she's you and you don exist.
+She's trying to take your place, how dare she.
+FIGHT IT, YOU MUSTN'T BE CONSUMED!
+(Roll willpower)
+
+
+
+
+FOOLISH ANIMAL! DO YOU THINK YOU CAN DEFEAT ME?
+NO! NO! HOW COULD THIS HAPPEN?! NOOOOOOOOOO! Oh wait she couldn't do it. Ok, cool.
+6
+willpower
+1
+12
+6
+0
+1
+A shadow is cast over you, it's a big, winged beast covering the sun above you.
+A bird.
+Upon close inspection, it's an eagle.
+"Hello human, I am the holy spirit of the haliaeetus leucocephalus, I  have come to test you and your cow, and decide if you're worthy."
+I guess you have no choice.
+Roll that sweet riding skill.
+
+
+
+
+"You've passed." it whispers in your ear, as it fades into nothingness. To your surprise, you find an eagle circling around you, following your every move now.
+"How foolish of me to think such a lowly being could compare. Truly dissapointing." she rebukes, as she soars up and dissapears into the now cloudy sky.
+6
+riding
+3
+6
+10
+-1
+2

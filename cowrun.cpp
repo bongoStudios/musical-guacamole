@@ -125,7 +125,6 @@ int main () {
 	keypad(menu_win, TRUE);
 
     while(1) {
-		int zedice;
 	    Jockey jockeys[5];
 		int i = 0;
 		clear();
@@ -179,7 +178,6 @@ int main () {
 			mvprintw(0, 0, "Oh, ok then, Who you choosin'?");
 			printMenu(menu_win, choice);
 		}
-		Jockey *theChosenOne = &(jockeys[choice-1]);
 		int theNumberOne = choice;
 		clear();
 		printRoad();
@@ -222,16 +220,22 @@ int main () {
 						refresh();
 						sleep(1);
 						int diceRes = throwDice(event.amountOfDices, event.kindOfDice) + attr;
-						printw("%dd%d+%s = %d\n", event.amountOfDices, event.kindOfDice, event.usedAttribute.c_str(), diceRes);
+						printw("(%dd%d+%s = %d) < %d = %s\n", event.amountOfDices, event.kindOfDice, event.usedAttribute.c_str(), diceRes, event.diffClass, diceRes < event.diffClass ? "true" : "false");
 						refresh();
 						getch();
 						if(diceRes < event.diffClass) {
 							printw("%s\n", event.loseText);
-							getch();
 							refresh();
+							getch();
+							printw("Move %d spaces", event.losePlacement);
+							refresh();
+							getch();
 							(*current).pos += event.losePlacement;
 						} else {
 							printw("%s\n", event.winText);
+							refresh();
+							getch();
+							printw("Move %d spaces", event.winPlacement);
 							refresh();
 							getch();
 							(*current).pos += event.winPlacement;
@@ -251,6 +255,7 @@ int main () {
 			}
 			sleep(2);
 		}
+		wclear(menu_win);
 		
 	}
 	endwin();

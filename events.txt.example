@@ -17,3 +17,5 @@ intelligence //it will use the intelligence stat of the cow
 15 //If you roll less than this, you fail, otherwise, you succeed on the event
 -2 // if you fail the event, the jockey gets moved this amount of spaces
 1 // if you succeed the event, the jockey gets moved this amount of spaces
+riding, luck
+int, str, will, dex
