@@ -196,7 +196,7 @@ int main () {
 				Jockey *current = &jockeys[i];
 				if((*current).pos > 19) {
 					kill = true;
-					printw("In line %d, %s and %s won!\n", theNumberOne, (*current).lastName, (*current).cow.name);
+					printw("In line %d, %s and %s won!\n", i+1, (*current).lastName, (*current).cow.name);
 					refresh();
 					getch();
 				}
@@ -205,7 +205,7 @@ int main () {
 				break;
 			for(int i = 0; i<5; i++) {
 				Jockey *current = &jockeys[i];
-				if(randomNo(100, 1) < 25) {
+				if(randomNo(100, 1) < 15) {
 					Event event = events[randomNo(amountOfEvents-1, 0)];
 					int attr = attributeToInt(event.usedAttribute, *current);
 					if(theNumberOne == (i+1)) {
